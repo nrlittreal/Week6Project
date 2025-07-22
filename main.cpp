@@ -1,72 +1,70 @@
 #include <iostream>
 
-#include <iomanip>
+#include <string>
 
 using namespace std;
 
-void getLength_Width(double& length, double& width);
-double CalcArea(double, double);
-double CalcPerimeter(double, double);
-void display(double, double);
+void getRegInfo(string&, int&, int&);
+bool IsLower(int, int&);
+void showLowest(string, int);
 
 int main()
 {
-  int choice;
-  double length, width, area, perimeter;
+  string name, lowestname;
+  int num, counter, lowest = 100000000;
+  bool low;
 
-  do
+  for (counter = 0; counter < 5; counter ++)
     {
-      cout << "Please enter the length and width of the rectangle: " << endl;
+      getRegInfo(name, num, counter);
       
-      getLength_Width(length, width);
+      low = IsLower(num, lowest);
 
-      if (length > 0 && width > 0)
+      if (low == true)
       {
-        CalcPerimeter(length, width);
-     
-        perimeter = CalcPerimeter(length, width);
-      
-        CalcArea(length, width);
-      
-        area = CalcArea(length, width);
-      
-        display(perimeter, area);
-      
-        cout << "If you would wish to calculate another rectangle press 1, if not, press any other key: " << endl;
-
-        cin >> choice;
+        lowestname = name;
       }
-      else
-      {
-        cout << "Please enter positive values." << endl;
+      
+    }
+  showLowest(lowestname, lowest);
 
-        choice = 1;
-      }
-    } while (choice == 1);
-    
   return 0;
 }
-//This function gets access to the length and width variables, gets values for them from the user, and sends them back to the main function.
-void getLength_Width(double& length, double& width)
-{
-  cin >> length >> width;
-}
-//This functions takes the length and width values as input and calculates the perimeter of the rectangle. It then sends that perimeter values back to the main function.
-double CalcPerimeter(double length, double width)
-{
-  return 2 * (length + width);
-}
-//This function takes the length and width values as input and calculates the area of the rectangle. It then sends that area value back to the main function.
-double CalcArea(double length, double width)
-{
-  return length * width;
-}
-//This function takes the perimeter and area as input and displays them to the user.
-void display(double perimeter, double area)
-{
-  cout << fixed << showpoint << setprecision(2);
-  
-  cout << "The perimeter of the rectangle is: " << perimeter << endl;
 
-  cout << "The area of the rectangle is: " << area << endl;
+// This function gets the name of the region and the number of accidents that occured there and checks that the value is positive. It then returns the name and value back to the main function.
+void getRegInfo(string& name, int& num, int& counter)
+{
+  int num1;
+  
+  cout << "Please enter the region of the city and the number of accidents that occured there: " << endl;
+
+  cin >> name >> num1;
+
+  if(num1 > 0)
+  {
+    num = num1;
+  }
+  else
+  {
+    cerr << "Please enter a positive value." << endl;
+
+    counter--;
+  }
+  
+}
+// This function checks to see if the number of accidents is less than the current lowest number of accidents. If it is, it returns a true value to the main function, and false if it is not.
+bool IsLower(int num, int& lowest)
+{
+  if (num < lowest)
+  {
+    lowest = num;
+    return true;
+  }
+  else
+    return false;
+}
+//This function takes in the name of the region with the lowest number of accidents and the number of accidents that occured there. It then displays the information to the user.
+void showLowest(string lowestname, int lowest)
+{
+  cout << "The region with the lowest number of accidents is " << lowestname << " with " << lowest << " accident(s)." << endl;
 }
