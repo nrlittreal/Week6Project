@@ -32,7 +32,7 @@ int main()
       
         display(perimeter, area);
       
-        cout << "If you would wish to calculate another rectangle press 1, if not, press 0: " << endl;
+        cout << "If you would wish to calculate another rectangle press 1, if not, press any other key: " << endl;
 
         cin >> choice;
       }
@@ -46,19 +46,22 @@ int main()
     
   return 0;
 }
-
+//This function gets access to the length and width variables, gets values for them from the user, and sends them back to the main function.
 void getLength_Width(double& length, double& width)
 {
   cin >> length >> width;
 }
+//This functions takes the length and width values as input and calculates the perimeter of the rectangle. It then sends that perimeter values back to the main function.
 double CalcPerimeter(double length, double width)
 {
   return 2 * (length + width);
 }
+//This function takes the length and width values as input and calculates the area of the rectangle. It then sends that area value back to the main function.
 double CalcArea(double length, double width)
 {
   return length * width;
 }
+//This function takes the perimeter and area as input and displays them to the user.
 void display(double perimeter, double area)
 {
   cout << fixed << showpoint << setprecision(2);
