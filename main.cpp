@@ -1,82 +1,121 @@
 #include <iostream>
-
+#include <cmath>
 #include <iomanip>
 
 using namespace std;
 
-double getScore();
-bool IsLower(double, double);
-bool IsHigher(double, double);
-double CalcAve(double, double, double);
+int getRooms();
+int getSqrtFeet(int, double&);
+void CalcGals(int&, int);
+double CalcHours(int);
+void CalcCosts(double, double);
+
+const double GPSF = 1.0/110, LPSF = 8.0/110, LCPH = 25.00;
 
 int main()
 {
-  double total, score, lowScore, highScore;
-
-  total = 0, lowScore = 11, highScore = -1;
-
-  for (int counter = 0; counter < 5; counter++)
-    {
-      score = getScore();
-
-      while (score < 0 || score > 10)
-      {
-        cout << "Invalid Score" << endl;
-
-        score = getScore();
-      }
-      total += score;
-
-      if (IsLower(score, lowScore))
-        {
-          lowScore = score;
-        }
-      else if (IsHigher(score, highScore))
-        {
-          highScore = score;
-        }
-        
-    }
-  cout << fixed << showpoint << setprecision(1) << "The Average score is " << CalcAve(total, lowScore, highScore) << endl;
+  double TotGalCost = 0;
+  int rooms = getRooms();
+  int sqrFeet = getSqrtFeet(rooms, TotGalCost);
+  int galReq = 0;
+  CalcGals(galReq, sqrFeet);
+  double TotalHours = CalcHours(sqrFeet);
+  CalcCosts(TotGalCost, TotalHours);
 
   return 0;
 }
-// This function asks for a score and then retuns it to the main function to be stored.
-double getScore()
+
+// Gets the number of rooms to be painted.
+int getRooms()
 {
-  double num;
+  int roomNum;
   
-  cout << "Please enter a score between 0 and 10: " << endl;
+  cout << "Please enter the number of rooms to be painted: " << endl;
 
-  cin >> num;
+  cin >> roomNum;
 
-  return num;
+  while(roomNum <= 1)
+    {
+      cout << "Please enter a number greater than 1: " << endl;
+
+      cin >> roomNum;
+    }
+
+  return roomNum;
 }
-// These two functions check to see if the score just inputted is the lowest or highest score. If it is highest or lowest, then the respective function will return true, and false if it is not.
-bool IsLower(double score, double lowScore)
+
+// Gets the square footage of each room and the cost of the paint per gallon for each room. It thens adds up the square footage and the cost of the paint.
+int getSqrtFeet(int rooms, double& TotGalCost)
 {
-  if (score < lowScore)
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  double GalCostTot = 0.0;
+
+  int sqrFeetTot = 0;
+
+  int sqrFeet;
+
+  double CostPerGal;
+
+  double GalCost;
+  
+  for (int counter = 0; counter < rooms; counter++)
+    {
+      cout << "Please enter the square footage of a room: " << endl;
+
+      cin >> sqrFeet;
+
+      while (sqrFeet <= 0)
+        {
+          cout << "Please enter a number greater than 0: " << endl;
+
+          cin >> sqrFeet;
+        }
+      
+      cout << "Please enter the cost of the paint for that room: " << endl;
+
+      cin >> CostPerGal;
+
+      while (CostPerGal <= 10.00)
+        {
+          cout << "Please enter a cost greater than $10.00: " << endl;
+
+          cin >> CostPerGal;
+        }
+
+      sqrFeetTot += sqrFeet;
+
+      GalCost = ceil(sqrFeet * GPSF) * CostPerGal ;
+
+      GalCostTot += GalCost;
+    }
+  TotGalCost = GalCostTot;
+
+  return sqrFeetTot;
 }
-bool IsHigher(double score, double highScore)
+
+// Calculates the gallons of paint required to paint the total square footage.
+void CalcGals(int& galReq, int sqrFeet)
 {
-  if (score > highScore)
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  galReq = ceil(sqrFeet * GPSF);
+  
+  cout << "The number of gallons of paint required is: " << galReq << endl;
 }
-// This function calculates the average score after the lowest and highest scores have been removed.
-double CalcAve(double total, double lowScore, double highScore)
+
+// Calculates the hours of labor required to paint the total square footage.
+double CalcHours(int sqrFeet)
 {
-  return (total - lowScore - highScore) / 3;
+  return sqrFeet * LPSF;
+}
+
+// Calculates the cost of the paint and the labor and the total cost of the job.
+void CalcCosts(double TotGalCost, double TotalHours)
+{
+  double LaborCost = TotalHours * LCPH;
+
+  cout << fixed << setprecision(2);
+
+  cout << "The total cost of the paint is $" << TotGalCost << endl;
+
+  cout << "The total cost of the labor is $" << LaborCost << endl;
+
+  cout << "The total cost of the job is $" << LaborCost + TotGalCost << endl;
 }
